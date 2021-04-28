@@ -3,31 +3,31 @@ const tasks = [
     _id: '5d2ca9e2e03d40b326596aa7',
     completed: true,
     body:
-      'Occaecat non ea quis occaecat ad culpa amet deserunt incididunt elit fugiat pariatur. Exercitation commodo culpa in veniam proident laboris in. Excepteur cupidatat eiusmod dolor consectetur exercitation nulla aliqua veniam fugiat irure mollit. Eu dolor dolor excepteur pariatur aute do do ut pariatur consequat reprehenderit deserunt.\r\n',
-    title: 'Eu ea incididunt sunt consectetur fugiat non.',
+      'Добавить функцию удаления. Реализовать смену темы оформления',
+    title: 'ToDo-List',
   },
   {
     _id: '5d2ca9e29c8a94095c1288e0',
     completed: false,
     body:
-      'Aliquip cupidatat ex adipisicing veniam do tempor. Lorem nulla adipisicing et esse cupidatat qui deserunt in fugiat duis est qui. Est adipisicing ipsum qui cupidatat exercitation. Cupidatat aliqua deserunt id deserunt excepteur nostrud culpa eu voluptate excepteur. Cillum officia proident anim aliquip. Dolore veniam qui reprehenderit voluptate non id anim.\r\n',
+      'Закончить изучение документации и выполнить практическое задание',
     title:
-      'Deserunt laborum id consectetur pariatur veniam occaecat occaecat tempor voluptate pariatur nulla reprehenderit ipsum.',
+      'Bootstrap 4',
   },
   {
     _id: '5d2ca9e2e03d40b3232496aa7',
     completed: true,
     body:
-      'Occaecat non ea quis occaecat ad culpa amet deserunt incididunt elit fugiat pariatur. Exercitation commodo culpa in veniam proident laboris in. Excepteur cupidatat eiusmod dolor consectetur exercitation nulla aliqua veniam fugiat irure mollit. Eu dolor dolor excepteur pariatur aute do do ut pariatur consequat reprehenderit deserunt.\r\n',
-    title: 'Eu ea incididunt sunt consectetur fugiat non.',
+      'Завершить блок DOM и пройти Тест 3: "Тест на знание DOM"',
+    title: 'Udemy Современный JavaScript',
   },
   {
     _id: '5d2ca9e29c8a94095564788e0',
     completed: false,
     body:
-      'Aliquip cupidatat ex adipisicing veniam do tempor. Lorem nulla adipisicing et esse cupidatat qui deserunt in fugiat duis est qui. Est adipisicing ipsum qui cupidatat exercitation. Cupidatat aliqua deserunt id deserunt excepteur nostrud culpa eu voluptate excepteur. Cillum officia proident anim aliquip. Dolore veniam qui reprehenderit voluptate non id anim.\r\n',
+      'Завершить курс "Основы верстки сайта" и получить сертификат',
     title:
-      'Deserunt laborum id consectetur pariatur veniam occaecat occaecat tempor voluptate pariatur nulla reprehenderit ipsum.',
+      'НЕТОЛОГИЯ',
   },
 ];
 
@@ -46,11 +46,10 @@ const tasks = [
   const inputTitle = form.elements['title'];
   const inputBody = form.elements['body'];
 
-  console.log(inputTitle, inputBody);
-
 //Events
   renderAllTasks(objOfTasks);  
   form.addEventListener('submit',onFormSubmitHandler);
+  listContainer.addEventListener('click', onDeleteHandler);
 
   function renderAllTasks(tasksList) {
       if(!tasksList) {
@@ -75,6 +74,8 @@ const tasks = [
       "flex-wrap",
       "mt-2"
     );
+     li.setAttribute('data-task-id', _id);
+      
       const span = document.createElement('span');
       span.textContent = title;
       span.style.fontWeight = "bold";
@@ -128,4 +129,28 @@ const tasks = [
 
     return{...newTask};
   }
+
+  function deleteTask(id) {
+    const { title } = objOfTasks[id];
+    const isConfirm = confirm(`Вы уверены что ходите удалить задачу: ${title}`);
+    if (!isConfirm) return isConfirm;
+    delete objOfTasks[id];
+    return isConfirm;
+  }
+
+  function deleteTaskFromHtml (confirmed, el) {
+    if (!confirmed) return;
+    el.remove();
+  }
+  
+  function onDeleteHandler({target}) {
+      if (target.classList.contains('delete-btn')) {
+      const parent = target.closest('[data-task-id]');
+      const id = parent.dataset.taskId;
+      const confirmed = deleteTask(id);   
+      deleteTaskFromHtml(confirmed, parent);
+     }
+  }
+
+
 })(tasks);
